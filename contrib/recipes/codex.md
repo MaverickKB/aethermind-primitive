@@ -19,7 +19,7 @@ aethermind layer \
   --root . \
   --type decision \
   --ctx build/cli \
-  --body "Use the package CLI rather than a Codex-only adapter for v0.1.0"
+  --body "Use the package CLI rather than a runner-specific adapter"
 ```
 
 Good Codex layer triggers:
@@ -30,7 +30,8 @@ Good Codex layer triggers:
 - a failure mode future Codex runs should not repeat;
 - an unresolved uncertainty that affects the next step.
 
-Do not write routine progress summaries, full transcripts, credentials, or local publication/proof chatter into project layers.
+Do not write routine progress summaries, full transcripts, credentials, or
+unrelated release-process chatter into project layers.
 
 ## Remote/customer systems
 

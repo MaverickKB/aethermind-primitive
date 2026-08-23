@@ -1,53 +1,92 @@
 # Quickstart
 
-This quickstart assumes the `aethermind` CLI is installed and available on `PATH`.
+## Install
 
-## Start local project continuity
+```bash
+python -m pip install .
+```
 
-From the project or data root you are working on:
+## Initialize a project store
 
 ```bash
 aethermind init --root . --purpose "start project continuity"
 ```
 
-This creates `.aethermind/` beside the work root and writes an init layer.
+This creates `.aethermind/`, writes the first layer, and leaves the 0.1 command
+shape intact. The 0.2 directory-only initialization form is:
 
-## Write a work layer
+```bash
+aethermind init --project-root .
+```
 
-When the session produces a load-bearing decision, correction, discovery, failure mode, or verification result, write it as a layer:
+That form creates the store directory without adding continuity. Use the
+purpose form when beginning real work so the store starts with a meaningful
+layer.
+
+## Write continuity
+
+```bash
+aethermind write-layer \
+  --project-root . \
+  --type decision \
+  --ctx build/adapter \
+  --body "Use the host that owns the project filesystem" \
+  --marker "!"
+```
+
+The original alias remains valid:
 
 ```bash
 aethermind layer \
   --root . \
-  --type decision \
-  --ctx build/cli \
-  --body "Use the CLI as the universal v0.1.0 surface"
+  --type discovery \
+  --ctx build/adapter \
+  --body "The original command still works"
 ```
 
-Keep layers dense. They should help a future agent act with better judgment, not replay the whole session.
+## Read and orient
+
+```bash
+aethermind read-layers --project-root .
+aethermind currentness --project-root .
+aethermind brief --project-root .
+aethermind brief-anchor --project-root . --anchor aem-example
+```
+
+`inspect --root .` remains an alias for `read-layers`.
+
+## Record texture and routine events
+
+```bash
+aethermind write-texture \
+  --project-root . \
+  --ctx build/attention \
+  --body "Keep the adapter thin"
+
+aethermind write-event \
+  --project-root . \
+  --type observation \
+  --ctx build/run \
+  --body "Local smoke completed"
+```
 
 ## Check the store
 
 ```bash
 aethermind validate --root .
-aethermind status --root .
-aethermind inspect --root .
+aethermind status --project-root .
+aethermind audit --project-root .
+aethermind capabilities --project-root .
 ```
 
-These commands are diagnostic. They do not replace writing layers during real work.
+## Upgrade an existing store
 
-## Remote/customer work
-
-For work on a remote or customer system, write local remote-work continuity by default:
+No rewrite is required for a 0.1 `layers.aem` file. Install 0.2 and validate it:
 
 ```bash
-aethermind remote-note \
-  --remote customer-host:/srv/app \
-  --task incident-1 \
-  --ctx triage \
-  --body "Inspected service state; continuity kept locally"
+aethermind validate --root .
+aethermind status --project-root .
 ```
 
-This writes under a local remote-work store such as `~/.aethermind/remote-work/...` and does not create `.aethermind/` on the remote/customer target by default.
-
-Use this when the continuity is useful to the operator but the remote system should not receive new persistence artifacts.
+The first new write appends a 0.2 record after the existing records. See
+[Upgrading to 0.2](upgrading-to-0.2.md) for preservation and rollback steps.
