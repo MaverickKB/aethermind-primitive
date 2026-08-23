@@ -2,44 +2,120 @@
 
 AetherMind is an open source continuity primitive for AI-assisted work.
 
-It gives agents a small, shared way to preserve load-bearing context beside the project they are changing: decisions, corrections, uncertainty, friction, and verification that should survive the current chat or agent run.
+It preserves compact working judgment beside the project it describes: decisions,
+corrections, discoveries, uncertainty, friction, verification, and the relationships
+that make those records current or historical.
 
-It is not a transcript store, task log, project manager, or hosted memory service.
+## Install
 
-## Why it exists
+```bash
+python -m pip install .
+```
 
-AI coding agents lose useful working judgment across context limits, handoffs, fresh sessions, and tool boundaries. AetherMind records that judgment as append-only layers in a project-local `.aethermind/` store.
-
-Any agent that can run shell commands can use it.
+The package installs the `aethermind` command and the `aethermind` Python module.
 
 ## Quickstart
 
+The original 0.1 commands remain available:
+
 ```bash
 aethermind init --root . --purpose "start project continuity"
-aethermind layer --root . --type decision --ctx build --body "Use the CLI as the universal v0.1.0 surface"
+aethermind layer --root . --type decision --ctx build --body "Keep continuity beside the project"
 aethermind validate --root .
+aethermind inspect --root .
 ```
 
-`init` creates `.aethermind/` and writes an init layer. `layer` records durable work context. `validate`, `status`, and `inspect` are diagnostic commands; they are not a substitute for writing continuity during real work.
+The 0.2 command names expose the complete local runtime:
 
-## Remote/customer work
+```bash
+aethermind write-layer --project-root . --type discovery --ctx build --body "The adapter path is working"
+aethermind currentness --project-root .
+aethermind brief --project-root .
+aethermind capabilities --project-root .
+```
 
-For work on systems where you should not leave project artifacts by default, write local remote-work continuity:
+## Store layout
+
+AetherMind continuity uses `.aem` files inside the project-local
+`.aethermind/` directory:
+
+```text
+.aethermind/
+  layers.aem
+  texture.aem
+  events.aem
+  archive.aem
+```
+
+`layers.aem` is the decision ledger. `texture.aem` holds compact attention
+pointers. `events.aem` keeps routine observations separate from the decision
+ledger. `archive.aem` preserves archived record copies; `layers.aem` receives
+the append-only tombstone that makes the archived records historical.
+
+## What changed in 0.2
+
+AetherMind 0.2 extends the original primitive with the following continuity
+methods:
+
+- six supported primitives: `layer`, `artifact-reference`, `anchor`,
+  `pressure-event`, `supersession`, and `rollback`;
+- explicit store initialization and acknowledged append results;
+- filtered reads, currentness projection, scoped briefs, and anchor briefs;
+- append-only texture, event, and archive stores;
+- correction, supersession, rollback, evidence, recurrence, verification, and
+  artifact relationships;
+- the original 0.1 Python helpers and CLI command names.
+
+Existing 0.1 `layers.aem` files remain readable. New records append without
+rewriting existing records. See [Upgrading to 0.2](docs/upgrading-to-0.2.md).
+
+## Python
+
+The 0.1 root-first API remains available:
+
+```python
+from aethermind import init_store, read_layers, validate_store, write_layer
+
+init_store(".", purpose="start project continuity")
+write_layer(
+    ".",
+    type="decision",
+    ctx="build/runtime",
+    body="Use the project-local AEM store.",
+    markers=["!"],
+)
+layers = read_layers(".")
+status = validate_store(".")
+```
+
+The current engine is available through `AetherMind`:
+
+```python
+from aethermind import AetherMind
+
+store = AetherMind(".", create=False)
+brief = store.brief()
+current = store.currentness()
+```
+
+## Remote work
+
+`aethermind remote-note` writes continuity to a local remote-work store while
+recording the target as metadata:
 
 ```bash
 aethermind remote-note \
-  --remote customer-host:/srv/app \
+  --remote example-host:/srv/app \
   --task incident-1 \
   --ctx triage \
-  --body "Inspected service state; kept continuity locally"
+  --body "Inspected the service and retained the decision locally"
 ```
 
-The remote target is metadata. The note is stored locally under a remote-work store and does not create `.aethermind/` on the remote/customer system by default.
+## Documentation
 
-## Agent recipes
-
-Basic recipes for Codex, Claude Code, and Grok Build live under `contrib/recipes/`. They are examples of using the CLI from agent runners; they are not separate architectures.
-
-## Scope
-
-See `SCOPE.md` for the product boundary and what belongs in an AetherMind layer.
+- [Scope](SCOPE.md)
+- [AEM format](spec/AEM_FORMAT.md)
+- [Quickstart](docs/quickstart.md)
+- [Upgrading to 0.2](docs/upgrading-to-0.2.md)
+- [Change log](CHANGELOG.md)
+- [Privacy](docs/privacy.md)

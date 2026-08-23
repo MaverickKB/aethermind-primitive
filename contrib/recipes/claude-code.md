@@ -28,7 +28,7 @@ Avoid writing:
 
 - secrets or customer-identifying details;
 - copied chat transcripts;
-- proof-output dumps;
+- generated output dumps;
 - routine status logs;
 - unrelated local operator context.
 

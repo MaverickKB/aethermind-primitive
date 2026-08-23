@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aethermind-primitive"
-version = "0.1.0"
+version = "0.2.0"
 description = "Universal harness-free AetherMind continuity primitive"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,9 +12,14 @@ license = {text = "MIT"}
 authors = [{name = "AetherMind contributors"}]
 dependencies = []
 
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
 [project.scripts]
 aethermind = "aethermind.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/aethermind"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]

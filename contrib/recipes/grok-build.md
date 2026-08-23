@@ -29,7 +29,7 @@ aethermind layer \
   --root . \
   --type decision \
   --ctx agent-rules/continuity \
-  --body "Use the AetherMind CLI directly from Grok Build rules; do not require a Grok-specific adapter for v0.1.0"
+  --body "Use the AetherMind CLI directly from Grok Build rules; do not require a runner-specific adapter"
 ```
 
 ## Remote/customer systems

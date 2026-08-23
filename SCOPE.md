@@ -1,70 +1,44 @@
 # Scope
 
-AetherMind is a continuity primitive for AI-assisted work.
+AetherMind is a project-local continuity primitive for AI-assisted work.
 
-Its job is narrow: preserve the small amount of working judgment that future agents need before they touch the same project again. That includes decisions, corrections, uncertainty, friction, verification, and local salience. It is not a transcript store, a task log, a project manager, or a general memory product.
+Its job is narrow: preserve the working judgment that a future agent needs before
+touching the same project. It records decisions, corrections, discoveries,
+uncertainty, friction, verification, and relationships between those records.
 
-## Product intent
+## 0.2 includes
 
-AetherMind gives any agent a common way to write durable continuity beside the work it is doing.
+- the AEM Light v1 project-local format;
+- the Python reference engine and command line adapter;
+- append-only `layers.aem`, `texture.aem`, `events.aem`, and `archive.aem`
+  stores;
+- layer, artifact-reference, anchor, pressure-event, supersession, and rollback
+  primitives;
+- explicit initialization, acknowledged writes, filtered reads, currentness,
+  scoped briefs, audit reports, events, and archiving;
+- the 0.1 root-first Python API and command names;
+- local remote-work notes;
+- examples for common agent runners.
 
-The primitive should be:
+## Boundary
 
-- write-first: real work records layers; read/status commands are diagnostic;
-- data-local: local project work writes beside the project data/source;
-- harness-neutral: the substrate is not tied to Codex, Claude Code, Grok Build, or any other agent runner;
-- format-first: the AEM format is the contract; the Python package is the first reference implementation;
-- low ceremony: an agent that can run shell commands can initialize a store, write a layer, and validate it.
+AetherMind does not replace a transcript store, task tracker, project manager,
+source control system, search index, or hosted memory service.
 
-## v0.1.0 includes
-
-The first public release includes only the pieces needed to prove that primitive:
-
-- AEM v1 format specification;
-- Python reference library;
-- installed CLI;
-- local store initialization;
-- layer writing;
-- local remote-work notes for customer/remote systems;
-- store validation, status, inspect, export, and import commands;
-- basic integration recipes for agent runners.
-
-## v0.1.0 does not include
-
-These are intentionally out of scope for the primitive release:
-
-- hosted sync or cloud storage;
-- account systems, licensing, billing, or paid product enforcement;
-- application-specific identity, salience, orchestration, or coordination infrastructure;
-- private evaluation artifacts, generated evidence bundles, or session notes;
-- harness-specific architecture or required plugins;
-- MCP as the primary adoption path;
-- a Node wrapper or language-specific duplicate clients;
-- writing `.aethermind/` onto customer or remote systems by default.
-
-## Local and remote boundary
-
-For local project work, `.aethermind/` belongs beside the project source or data being worked.
-
-For customer or remote work, continuity is still written, but by default it is written to a local remote-work store. The remote target is metadata. The primitive should not leave `.aethermind/` artifacts on systems where the operator may not own the persistence policy.
+The primitive remains harness-neutral and data-local. Local project continuity
+belongs beside the project source or data. Remote-work continuity can be retained in
+a local remote-work store when the target filesystem should remain unchanged.
 
 ## What belongs in a layer
 
-Good layers are dense and load-bearing:
+Useful layers are compact and consequential:
 
-- a decision and why it matters;
-- a correction to a wrong assumption;
-- a failure mode future agents must not repeat;
-- uncertainty that changes the next step;
-- verification evidence that affects confidence;
-- a pointer to what should be checked first next time.
+- a decision and its reason;
+- a correction to an earlier assumption;
+- a failure mode future agents should recognize;
+- uncertainty that changes the next action;
+- verification evidence that changes confidence;
+- an artifact or anchor relationship;
+- an explicit supersession or rollback.
 
-Bad layers are noise:
-
-- routine progress logs;
-- copied chat transcripts;
-- long status reports;
-- generated evidence output;
-- private operational notes that do not belong in a public project store.
-
-The primitive should make useful continuity cheap without turning the repository into a low-signal archive.
+Routine progress, copied transcripts, and generated logs belong elsewhere.
